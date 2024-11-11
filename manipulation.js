@@ -27,12 +27,14 @@ function startGame() {
 }
 
 
-function showScene() {
+function showScene(scene) {
     const content = document.getElementById("content");
     const options = document.getElementById("options");
 
     content.innerHTML = ""; /* Clear previous content */
-    options.innerHTML = ""; /* Clear previous options */
+    options.innerHTML = ""; /* Clear previous buttons */
+
+    changeBackground(scene);
 
     /* Define the text  based on the scene */
     let sceneText = "";
@@ -52,7 +54,7 @@ function showScene() {
                 content.innerHTML += `
                     <div class="button-container">
                         <button onclick="listenToTheOldMan()">Listen</button>
-                        <button onclick="showScene('story)">Continue</button>
+                        <button onclick="showScene('story')">Continue</button>
                     </div>
                 `;
             });
@@ -89,6 +91,8 @@ function typeText(text, callback) {
             letterIndex++;
             setTimeout(type, typingSpeed);
         } else {
+
+            /* when the text is finished, call the callback function to manipulate the DOM */
             if (callback) callback();
         }
     }
@@ -106,10 +110,10 @@ function showWhisperOptions() {
     `;
 
     const buttons = document.querySelectorAll('.fade-in');
-    buttons.forEach((buttons, index) => {
+    buttons.forEach((button, index) => {
         setTimeout(() => {
-            buttons.classList.add("show");
-        }, 200 * (index + 1));
+            button.classList.add("show");
+        }, 200 * (index + 1)); /* a short delay for each button */
     });
 }
 
@@ -125,9 +129,10 @@ function selectPath(choice) {
     if (confirmation) {
         showPopupMessage("Path chosen");
 
+        /* Manage the choice and change the scene based on it */
         switch (choice) {
             case "explore":
-                showScene("ignore");
+                showScene("explore");
                 break;
             case "ignore":
                 showScene("ignore");
@@ -151,10 +156,10 @@ function changeBackground(scene) {
         case "story":
             body.style.backgroundImage = "url('media/youngMan.webp')";
             break;
-        case "story":
+        case "explore":
             body.style.backgroundImage = "url('media/oldSage.png')";
             break;
-        case "story":
+        case "ignore":
             body.style.backgroundImage = "url('media/examine.webp')";
             break;
         default:
@@ -190,7 +195,7 @@ function showPopupMessage(message) {
 }
 
 
-const audio = new Audio('media/oldSage.mp3');
+const audio = new Audio('media/wiseManSaid.mp3');
 let isPlaying = false;
 
 function listenToTheOldMan() {
