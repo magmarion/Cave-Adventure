@@ -45,7 +45,6 @@ h1 {
     overflow: hidden;
 }
 
-
 #blurred-box {
     background: rgba(0, 0, 0, 0.7);
     border-radius: 50px;
@@ -53,6 +52,23 @@ h1 {
     text-align: center;
 }
 
+/* ! Not used anymore */
+
+/* .console-underscore {
+    display: inline-block;
+    animation: blink 1a infinite;
+    font-weight: bold;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+} */
 
 #options {
     flex-direction: column;
@@ -71,8 +87,35 @@ h1 {
     width: 80%;
 }
 
-/* Buttons */
+.whisperText {
+    font-family: "VT323", monospace;
+    font-size: larger;
+    text-transform: uppercase;
+    color: rgb(255, 68, 51);
+}
 
+.oldSageText {
+    font-style: italic;
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease, transform 1s ease;
+}
+
+.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+
+/* Buttons */
 button {
     font-family: "VT323", monospace;
     background-color: rgb(243, 156, 18);
