@@ -1,3 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Nosifer&family=Signika:wght@300..700&family=VT323&display=swap');
+
+
 body {
     background-image: url(images_audio/black.jpeg);
     background-size: cover;
@@ -12,4 +17,38 @@ body {
     justify-content: center;
     height: 100vh;
     font-family: 'Cairo', sans-serif;
+}
+
+h1 {
+    font-family: "VT323", monospace;
+    background-image: url(https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmxhN2pjaGp4MmZtanZmc2VkcDEzYnd5bms5dTF6cGo4ZWZyMWkxcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/TjSaNRzMZyrk6KCQOb/giphy-downsized-large.gif);
+    background-size: cover;
+    color: transparent;
+    -webkit-background-clip: text;
+    font-size: 6rem;
+    text-align: center;
+    letter-spacing: 1px;
+    line-height: 1.4rem;
+    margin: 20px 0;
+    text-transform: uppercase;
+}
+
+/* Buttons */
+
+button {
+    font-family: "VT323", monospace;
+    background-color: rgb(243, 156, 18);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 1.7rem;
+    margin: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+    background-color: rgb(231, 126, 35);
+    transform: translateY(-2px); 
 }
