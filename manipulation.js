@@ -252,3 +252,49 @@ function readInscription() {
     `;
 }
 
+
+function addToInventory(...items) {
+    let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+
+    items.forEach(item => {
+        if (!inventory.includes(item)) {
+            inventory.push(item);
+        }
+    });
+}
+
+
+function getInventory() {
+    return JSON.parse(localStorage.getItem('inventory')) || [];
+}
+
+function removeFromInventory(item) {
+    let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+    inventory = inventory.filter(i => i !== item);
+    localStorage.setItem('inventory', JSON.stringify(inventory));
+}
+
+function showInventory() {
+    const inventory = getInventory();
+    alert(`inventory: ${inventory.length ? inventory.join(', ') : 'Empty'}`);
+}
+
+function pickUpItem(item) {
+    addToInventory(item);
+    showInventory();
+}
+
+
+function showInventoryButton() {
+
+    if (!document.getElementById("inventoryButton")) {
+        const inventoryButton = document.createElement("button");
+        inventoryButton.id = "inventoryButton";
+        inventoryButton.innerText = "Inventory";
+        inventoryButton.onclick = showInventory;
+
+        /* Place the button somewhere */
+        document.body.appendChild(inventoryButton);
+
+    }
+}
