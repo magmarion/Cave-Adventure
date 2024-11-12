@@ -22,7 +22,7 @@ function startGame() {
 
     /* Start the typing for the first scene */
     typeText(storyText, () => {
-        setTimeout(() => showWhisperOptions(), 500);
+        setTimeout(() => evnetTextAndFirstButtons(), 500);
     });
 }
 
@@ -40,24 +40,43 @@ function showScene(scene) {
     let sceneText = "";
 
     switch (scene) {
-        case "story":
+        case "narration":
             sceneText = `A young man wakes up in a dark cave, alone and disoriented. The only thing he remembers is a mysterious map hidden in his pocket, showing the way to a legendary treasure, the lost ark.`;
             typeText(sceneText, () => {
-                setTimeout(() => showWhisperOptions(), 500);
+                setTimeout(() => evnetTextAndFirstButtons(), 500);
             });
             break;
 
 
         case "explore":
-            sceneText = `Following the whisper, he discovers an old sage who gives him a clue to the treasure. The Old Sage: "The wilderness is unforgiving. Learn to read the signs, and you'll find your way.`;
+            sceneText = `Following the whisper, he discovers an old sage who gives him a clue to the treasure. 
+            The Old Sage: "The wilderness is unforgiving. Learn to read the signs, and you'll find your way.`;
             typeText(sceneText, () => {
                 content.innerHTML += `
                     <div class="button-container">
-                        <button onclick="listenToTheOldMan()">Listen</button>
-                        <button onclick="showScene('story')">Continue</button>
+                        <button onclick="listenToTheOldMan()">Ask For Advice</button>
+                        <button onclick="showScene('narration1')">Continue Journey</button>
                     </div>
                 `;
             });
+            break;
+
+        // ! ask how to add eventText i andra cases
+        case "narration1":
+            sceneText = `A chill crept down his spine as the old man's words echoed. 
+                        Curiosity and dread warred within him. Drawn by the promise of treasure, he ventured deeper into the ominous darkness.`;
+            typeText(sceneText, () => {
+                setTimeout(() => { });
+                content.innerHTML += `
+                    <p class="whisperText fade-in">...A strange whisper is heard...</p>
+                    <div class="button-container">
+
+                        <button onclick="showScene('path 1')">Path 1</button>
+                        <button onclick="showScene('path 2')">Path 2</button>
+                    </div>
+                `;
+            });
+
             break;
 
 
@@ -66,8 +85,8 @@ function showScene(scene) {
             typeText(sceneText, () => {
                 content.innerHTML += `
                     <div class="button-container">
-                        <button onclick="exploreText()">Read The Scripture</button>
-                        <button onclick="showScene('story')">Continue</button>
+                        <button onclick="readInscription()">Read The Scripture</button>
+                        <button onclick="showScene('story')">Continue Journey</button>
                     </div>
                 `;
             });
@@ -76,6 +95,34 @@ function showScene(scene) {
     }
 }
 
+function changeBackground(scene) {
+    const body = document.body;
+
+    /* Define the background images for each scene */
+
+    switch (scene) {
+        case "story":
+            body.style.backgroundImage = "url('media/youngMan.webp')";
+            break;
+        case "explore":
+            body.style.backgroundImage = "url('media/oldSage.png')";
+            break;
+        case "ignore":
+            body.style.backgroundImage = "url('media/examine.webp')";
+            break;
+        case "narration1":
+            body.style.backgroundImage = "url('media/into_depper.webp')";
+            break;
+        default:
+            body.style.backgroundImage = "url('media/cave.webp')";
+            break;
+
+    }
+
+    /* Add smooth transition on background change */
+    body.style.transition = "background-image 1s ease-in-out";
+
+}
 
 function typeText(text, callback) {
     const storyTextElement = document.getElementById("content");
@@ -83,7 +130,7 @@ function typeText(text, callback) {
     storyTextElement.style.display = "block"; /* Show the story text */
 
     let letterIndex = 0;
-    const typingSpeed = 5;
+    const typingSpeed = 3;
 
     function type() {
         if (letterIndex < text.length) {
@@ -100,8 +147,12 @@ function typeText(text, callback) {
     type();
 }
 
+// function eventText() {
 
-function showWhisperOptions() {
+// }
+
+
+function evnetTextAndFirstButtons() {
     const options = document.getElementById("options");
     options.innerHTML = `
         <p class="whisperText fade-in">...A strange whisper is heard...</p>
@@ -147,31 +198,6 @@ function selectPath(choice) {
 
 
 
-function changeBackground(scene) {
-    const body = document.body;
-
-    /* Define the background images for each scene */
-
-    switch (scene) {
-        case "story":
-            body.style.backgroundImage = "url('media/youngMan.webp')";
-            break;
-        case "explore":
-            body.style.backgroundImage = "url('media/oldSage.png')";
-            break;
-        case "ignore":
-            body.style.backgroundImage = "url('media/examine.webp')";
-            break;
-        default:
-            body.style.backgroundImage = "url('images_audio/cave.webp')";
-            break;
-
-    }
-
-    /* Add smooth transition on background change */
-    body.style.transition = "background-image 1s ease-in-out";
-
-}
 
 function showPopupMessage(message) {
     const popup = document.getElementById("popupMessage");
@@ -181,13 +207,13 @@ function showPopupMessage(message) {
     /* Popup-animation */
     setTimeout(() => {
         popup.style.opacity = "1";
-        popup.style.transform = "translateY(-50%, -50%) scale(1)";
+        popup.style.transform = "translate(-50%, -50%) scale(1)";
     }, 10);
 
     /* Hide the popup after 3 seconds */
     setTimeout(() => {
         popup.style.opacity = "0";
-        popup.style.transform = "translateY(-50%, -50%) scale(0.9)";
+        popup.style.transform = "translate(-50%, -50%) scale(0.9)";
         setTimeout(() => {
             popup.style.display = "none";
         }, 500);
@@ -212,12 +238,12 @@ function listenToTheOldMan() {
 
 
 
-function exploreText() {
+function readInscription() {
     const content = document.getElementById("content");
     const options = document.getElementById("options");
 
     content.innerHTML = `
-        <p>When the shadows dance on the wall like dead butterflies, and the stars form a cross in the north,
+        <p>[When the shadows dance on the wall like dead butterflies, and the stars form a cross in the north,
             seek beneath the roots of the lonely tree.]</p>
     `;
 
