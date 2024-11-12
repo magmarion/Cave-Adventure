@@ -30,7 +30,7 @@ h1 {
     text-align: center;
     letter-spacing: 1px;
     line-height: 1.4;
-    /* ! look for this code later */
+    /* ! look for code above later */
     margin: 20px 0;
     text-transform: uppercase;
 }
@@ -98,7 +98,7 @@ h1 {
     margin-top: 20px;
 }
 
-#content {
+#narration {
     font-family: "VT323", monospace;
     font-size: larger;
     text-align: left;
@@ -109,7 +109,7 @@ h1 {
     width: 80%;
 }
 
-.whisperText {
+.eventTextStyle {
     font-family: "VT323", monospace;
     font-size: x-large;
     text-transform: uppercase;
