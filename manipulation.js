@@ -2,7 +2,7 @@ window.addEventListener("DOMContentLoaded", main);
 
 
 function main() {
-
+    // loadStateFromLs();
 }
 
 function startGame() {
@@ -13,6 +13,9 @@ function startGame() {
     /* Show the game interface */
     document.getElementById("sceneContainer").style.display = "flex";
 
+    addToInventory("map", "torch", "rope");
+
+    showInventoryButton();
 
     /* Change the background for the first scene */
     changeBackground('story');
