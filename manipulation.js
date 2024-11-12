@@ -25,16 +25,18 @@ function startGame() {
 
     /* Start the typing for the first scene */
     typeText(storyText, () => {
-        setTimeout(() => evnetTextAndFirstButtons(), 500);
+        setTimeout(() => eventTextAndButtons(), 500);
     });
 }
 
 
 function showScene(scene) {
-    const content = document.getElementById("content");
+    const narration = document.getElementById("narration");
+    const events = document.getElementById("events");
     const options = document.getElementById("options");
 
-    content.innerHTML = ""; /* Clear previous content */
+    narration.innerHTML = ""; /* Clear previous narration */
+    events.innerHTML = ""; /* Clear previous buttons */
     options.innerHTML = ""; /* Clear previous buttons */
 
     changeBackground(scene);
@@ -46,7 +48,7 @@ function showScene(scene) {
         case "narration":
             sceneText = `A young man wakes up in a dark cave, alone and disoriented. The only thing he remembers is a mysterious map hidden in his pocket, showing the way to a legendary treasure, the lost ark.`;
             typeText(sceneText, () => {
-                setTimeout(() => evnetTextAndFirstButtons(), 500);
+                setTimeout(() => eventTextAndButtons(), 500);
             });
             break;
 
@@ -55,7 +57,7 @@ function showScene(scene) {
             sceneText = `Following the whisper, he discovers an old sage who gives him a clue to the treasure. 
             The Old Sage: "The wilderness is unforgiving. Learn to read the signs, and you'll find your way.`;
             typeText(sceneText, () => {
-                content.innerHTML += `
+                options.innerHTML += `
                     <div class="button-container">
                         <button onclick="listenToTheOldMan()">Ask For Advice</button>
                         <button onclick="showScene('narration1')">Continue Journey</button>
@@ -64,20 +66,20 @@ function showScene(scene) {
             });
             break;
 
-        // ! ask how to add eventText i andra cases
         case "narration1":
             sceneText = `A chill crept down his spine as the old man's words echoed. 
                         Curiosity and dread warred within him. Drawn by the promise of treasure, he ventured deeper into the ominous darkness.`;
             typeText(sceneText, () => {
-                setTimeout(() => { });
-                content.innerHTML += `
-                    <p class="whisperText fade-in">...A strange whisper is heard...</p>
+                // setTimeout(() => { });
+                events.innerHTML += `
+                    <p class="eventTextStyle fade-in">...A strange whisper is heard...</p>`;
+                options.innerHTML += `                    
                     <div class="button-container">
-
                         <button onclick="showScene('path 1')">Path 1</button>
                         <button onclick="showScene('path 2')">Path 2</button>
                     </div>
                 `;
+                fadeInContent();
             });
 
             break;
@@ -86,7 +88,7 @@ function showScene(scene) {
         case "ignore":
             sceneText = `The character ignores the whisper and on his way he finds a mysterious message on a wall, giving him a clue about the journey ahead.`;
             typeText(sceneText, () => {
-                content.innerHTML += `
+                narration.innerHTML += `
                     <div class="button-container">
                         <button onclick="readInscription()">Read The Scripture</button>
                         <button onclick="showScene('story')">Continue Journey</button>
@@ -97,6 +99,41 @@ function showScene(scene) {
 
     }
 }
+
+
+function eventTextAndButtons() {
+    const events = document.getElementById("events");
+    const options = document.getElementById("options");
+    events.innerHTML = `
+            <p class="eventTextStyle fade-in">...A strange whisper is heard...</p>
+    `;
+
+    options.innerHTML = `
+        <button onclick="selectPath('explore')" class="fade-in">EXPLORE</button>
+        <button onclick="selectPath('ignore')" class="fade-in">IGNORE</button>    
+    `;
+
+    fadeInContent();
+}
+
+
+// function evnetTextAndFirstButtons() {
+//     const options = document.getElementById("options");
+//     eventText();
+
+//     fadeInContent();
+// }
+
+function fadeInContent() {
+    const buttons = document.querySelectorAll('.fade-in');
+    buttons.forEach((button, index) => {
+        setTimeout(() => {
+            button.classList.add("show");
+        }, 200 * (index + 1)); /* a short delay for each button */
+    });
+}
+
+
 
 function changeBackground(scene) {
     const body = document.body;
@@ -128,16 +165,16 @@ function changeBackground(scene) {
 }
 
 function typeText(text, callback) {
-    const storyTextElement = document.getElementById("content");
-    storyTextElement.textContent = "";
-    storyTextElement.style.display = "block"; /* Show the story text */
+    const narrationText = document.getElementById("narration");
+    narrationText.textContent = "";
+    narrationText.style.display = "block"; /* Show the story text */
 
     let letterIndex = 0;
     const typingSpeed = 3;
 
     function type() {
         if (letterIndex < text.length) {
-            storyTextElement.textContent += text[letterIndex];
+            narrationText.textContent += text[letterIndex];
             letterIndex++;
             setTimeout(type, typingSpeed);
         } else {
@@ -155,21 +192,6 @@ function typeText(text, callback) {
 // }
 
 
-function evnetTextAndFirstButtons() {
-    const options = document.getElementById("options");
-    options.innerHTML = `
-        <p class="whisperText fade-in">...A strange whisper is heard...</p>
-        <button onclick="selectPath('explore')" class="fade-in">EXPLORE</button>
-        <button onclick="selectPath('ignore')" class="fade-in">IGNORE</button>    
-    `;
-
-    const buttons = document.querySelectorAll('.fade-in');
-    buttons.forEach((button, index) => {
-        setTimeout(() => {
-            button.classList.add("show");
-        }, 200 * (index + 1)); /* a short delay for each button */
-    });
-}
 
 function selectPath(choice) {
     let confirmation;
@@ -242,10 +264,10 @@ function listenToTheOldMan() {
 
 
 function readInscription() {
-    const content = document.getElementById("content");
+    const narration = document.getElementById("narration");
     const options = document.getElementById("options");
 
-    content.innerHTML = `
+    narration.innerHTML = `
         <p>[When the shadows dance on the wall like dead butterflies, and the stars form a cross in the north,
             seek beneath the roots of the lonely tree.]</p>
     `;
