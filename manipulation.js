@@ -264,6 +264,11 @@ function addToInventory(...items) {
             inventory.push(item);
         }
     });
+
+    localStorage.setItem('inventory', JSON.stringify(inventory));
+    items.forEach(item => {
+        showPopupMessage(`${item} added to inventory!`);
+    });
 }
 
 
