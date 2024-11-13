@@ -25,7 +25,7 @@ function startGame() {
 
     /* Start the typing for the first scene */
     typeText(storyText, () => {
-        setTimeout(() => eventTextAndButtons(), 500);
+        setTimeout(() => eventTextAndButtons('explore'), 500);
     });
 }
 
@@ -45,10 +45,10 @@ function showScene(scene) {
     let sceneText = "";
 
     switch (scene) {
-        case "narration":
+        case "narration1":
             sceneText = `A young man wakes up in a dark cave, alone and disoriented. The only thing he remembers is a mysterious map hidden in his pocket, showing the way to a legendary treasure, the lost ark.`;
             typeText(sceneText, () => {
-                setTimeout(() => eventTextAndButtons(), 500);
+                setTimeout(() => eventTextAndButtons('explore'), 500);
             });
             break;
 
@@ -59,70 +59,117 @@ function showScene(scene) {
             typeText(sceneText, () => {
                 options.innerHTML += `
                     <div class="button-container">
-                        <button onclick="listenToTheOldMan()">Ask For Advice</button>
-                        <button onclick="showScene('narration1')">Continue Journey</button>
+                        <button onclick="listenToTheOldMan()" class="fade-in">Ask For Advice</button>
+                        <button onclick="showScene('narrationAfterExplore')" class="fade-in">Continue Journey</button>
                     </div>
                 `;
+                setTimeout(fadeInContent, 100);
+
             });
             break;
 
-        case "narration1":
+        case "narrationAfterExplore":
             sceneText = `A chill crept down his spine as the old man's words echoed. 
                         Curiosity and dread warred within him. Drawn by the promise of treasure, he ventured deeper into the ominous darkness.`;
             typeText(sceneText, () => {
-                // setTimeout(() => { });
-                events.innerHTML += `
-                    <p class="eventTextStyle fade-in">...A strange whisper is heard...</p>`;
-                options.innerHTML += `                    
-                    <div class="button-container">
-                        <button onclick="showScene('path 1')">Path 1</button>
-                        <button onclick="showScene('path 2')">Path 2</button>
-                    </div>
-                `;
-                fadeInContent();
+                setTimeout(() => eventTextAndButtons('crossroads'), 500);
             });
 
             break;
 
-
         case "ignore":
-            sceneText = `The character ignores the whisper and on his way he finds a mysterious message on a wall, giving him a clue about the journey ahead.`;
+            sceneText = `While the faint whisper still echoes in the air, the character feels a chilly wind sweep through the cave. 
+            Something makes you hesitate the feeling of following the whisper feels dangerous, and maybe even unnecessary.
+            He decides to ignore the sound and continue forward and finds a mysterious message on a wall.
+            `;
+
             typeText(sceneText, () => {
                 narration.innerHTML += `
                     <div class="button-container">
-                        <button onclick="readInscription()">Read The Scripture</button>
-                        <button onclick="showScene('story')">Continue Journey</button>
+                        <button onclick="readInscription()" class="fade-in">Read The Scripture</button>
+                        <button onclick="showScene('nextScene')" class="fade-in">Continue Journey</button>
                     </div>
                 `;
+                setTimeout(fadeInContent, 100);
             });
             break;
 
+        case "nextScene":
+            sceneText = `The player, unable to decipher the cryptic message, continues their journey. 
+            The air grows colder, the shadows longer. As the path twists and turns, uncertainty creeps in. 
+            `;
+
+            typeText(sceneText, () => {
+                narration.innerHTML += `
+                    <div class="button-container">
+                        <button onclick="showScene('criticalMoment')" class="fade-in">Keep Moving Forward</button>
+                    </div>
+                `;
+                setTimeout(fadeInContent, 100);
+            });
+            break;
+
+        case "criticalMoment":
+            sceneText = `As the player ventures deeper, a chilling presence fills the air. 
+            The darkness feels alive, as if something unseen trails behind. 
+            They reach a spot where the walls are clawed with strange marks and unsettling tracks—signs of recent visitors...or perhaps something far more menacing.
+            `;
+
+            typeText(sceneText, () => {
+                setTimeout(() => eventTextAndButtons('now_or_never'), 500);
+            });
+            break;
+
+        case "success":
+            
     }
 }
 
 
-function eventTextAndButtons() {
+function eventTextAndButtons(scene) {
     const events = document.getElementById("events");
     const options = document.getElementById("options");
-    events.innerHTML = `
-            <p class="eventTextStyle fade-in">...A strange whisper is heard...</p>
-    `;
 
-    options.innerHTML = `
-        <button onclick="selectPath('explore')" class="fade-in">EXPLORE</button>
-        <button onclick="selectPath('ignore')" class="fade-in">IGNORE</button>    
-    `;
+    events.innerHTML = "";
+    options.innerHTML = "";
+
+    let eventText = "";
+
+    events.innerHTML = `
+            <p class="eventTextStyle fade-in">...A strange whisper is heard...</p>`;
+
+    switch (scene) {
+        case 'explore':
+            eventText = "...A strange whisper is heard...";
+            options.innerHTML = `
+                <button onclick="selectPath('explore')" class="fade-in">EXPLORE</button>
+                <button onclick="selectPath('ignore')" class="fade-in">IGNORE</button>   
+            `;
+            break;
+
+        case 'crossroads':
+            eventText = "...Squeeze through or crush your toes? That is the question....";
+            options.innerHTML = `
+                <button onclick="selectPath('narrowPassage')" class="fade-in">The Narrow Passage</button>
+                <button onclick="selectPath('rockyRoad')" class="fade-in">The Rocky Road</button>
+            `;
+            break;
+
+        case "now_or_never":
+            eventText = 'The red eyes glowed in the darkness, freezing the young man in horror. His heart pounded so fiercely, it felt ready to burst."';
+            options.innerHTML = `
+                <button onclick="selectPath('turnBack')" class="fade-in">Leave The Cave</button>
+            `;
+            break;
+
+        default:
+            eventText = "";
+    }
+
+    events.innerHTML = `<p class="eventTextStyle fade-in">${eventText}</p>`;
 
     fadeInContent();
 }
-
-
-// function evnetTextAndFirstButtons() {
-//     const options = document.getElementById("options");
-//     eventText();
-
-//     fadeInContent();
-// }
 
 function fadeInContent() {
     const buttons = document.querySelectorAll('.fade-in');
@@ -131,6 +178,44 @@ function fadeInContent() {
             button.classList.add("show");
         }, 200 * (index + 1)); /* a short delay for each button */
     });
+}
+
+function selectPath(choice) {
+    let confirmation;
+
+    if (choice === "explore") {
+        confirmation = confirm("Are you sure you want to explore the whisper?");
+    } else if (choice === "ignore") {
+        confirmation = confirm("Are you sure you want to ignore the whisper?");
+    } else if (choice === "narrowPassage") {
+        confirmation = confirm("Sure with your choice?");
+    } else if (choice === "rockyRoad") {
+        confirmation = confirm("You're about to choose The Rocky Road")
+    }
+
+    if (confirmation) {
+        showPopupMessage("Path chosen");
+
+        /* Manage the choice and change the scene based on it */
+        switch (choice) {
+            case "explore":
+                showScene("explore");
+                break;
+            case "ignore":
+                showScene("ignore");
+                break;
+            case "narrowPassage":
+                showScene("narrowPassage");
+                break;
+            case "rockyRoad":
+                showScene("rockyRoad");
+                break;
+        }
+
+    } else {
+        showPopupMessage("Action canceled");
+
+    }
 }
 
 
@@ -150,11 +235,17 @@ function changeBackground(scene) {
         case "ignore":
             body.style.backgroundImage = "url('media/examine.webp')";
             break;
-        case "narration1":
+        case "narrationAfterExplore":
             body.style.backgroundImage = "url('media/into_depper.webp')";
             break;
+        case "nextScene":
+            body.style.backgroundImage = "url('media/nextScene.webp')";
+            break;
+        case "criticalMoment":
+            body.style.backgroundImage = "url('media/leave_cave.webp')";
+            break;
         default:
-            body.style.backgroundImage = "url('media/cave.webp')";
+            body.style.backgroundImage = "";
             break;
 
     }
@@ -193,33 +284,6 @@ function typeText(text, callback) {
 
 
 
-function selectPath(choice) {
-    let confirmation;
-
-    if (choice === "explore") {
-        confirmation = confirm("Are you sure you want to explore the whisper?");
-    } else if (choice === "ignore") {
-        confirmation = confirm("Are you sure you want to ignore the whisper?");
-    }
-
-    if (confirmation) {
-        showPopupMessage("Path chosen");
-
-        /* Manage the choice and change the scene based on it */
-        switch (choice) {
-            case "explore":
-                showScene("explore");
-                break;
-            case "ignore":
-                showScene("ignore");
-                break;
-        }
-
-    } else {
-        showPopupMessage("Action canceled");
-
-    }
-}
 
 
 
@@ -268,8 +332,7 @@ function readInscription() {
     const options = document.getElementById("options");
 
     narration.innerHTML = `
-        <p>[When the shadows dance on the wall like dead butterflies, and the stars form a cross in the north,
-            seek beneath the roots of the lonely tree.]</p>
+        <p>[As dark shadows move on the stone's surface, and echoes of lost voices fill the air, look for the stone that doesn't belong. There, deep in the heart of the cave, you will find the key to what is hidden]</p>
     `;
 
     options.innerHTML = `
