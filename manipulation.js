@@ -3,19 +3,24 @@ window.addEventListener("DOMContentLoaded", main);
 
 function main() {
     // loadStateFromLs();
+    // startGame();
+    
 }
 
 function startGame() {
-
+    
     document.getElementById("title").style.display = "none";
     document.getElementById("startScreen").style.display = "none";
-
+    
     /* Show the game interface */
     document.getElementById("sceneContainer").style.display = "flex";
-
-    addToInventory("map", "torch", "rope");
-
+    
     showInventoryButton();
+    document.getElementById("inventoryButton").style.display = "block";
+    
+    addToInventory("map", "torch", "rope");
+    
+
 
     /* Change the background for the first scene */
     changeBackground('story');
@@ -274,13 +279,13 @@ function typeText(text, callback) {
     narrationText.style.display = "block"; /* Show the story text */
 
     let letterIndex = 0;
-    const typingSpeed = 3;
+    const typingSpeed = 10;
 
     // TODO : Add typing sound
-    // const typingSound = new Audio("media/typingSound.mp3");
-    // typingSound.loop = ture;
+    const typingSound = new Audio("media/typingSound.mp3");
+    typingSound.loop = true;
 
-    // typingSound.play();
+    typingSound.play();
 
     function type() {
         if (letterIndex < text.length) {
@@ -290,8 +295,8 @@ function typeText(text, callback) {
         } else {
 
             // TODO : Add typing sound
-            // typingSound.pause();
-            // typingSound.currentTime = 0;
+            typingSound.pause();
+            typingSound.currentTime = 0;
 
             /* when the text is finished, call the callback function to manipulate the DOM */
             if (callback) callback();
@@ -378,7 +383,9 @@ function restartGame() {
     document.getElementById("startScreen").style.display = "block";
 
 // ! MAKE THE INVENTORY BUTTON VISIBLE AGAIN ONCE THE PLAYER IS CLICKED ON THE START GAME BUTTON NOT ON WELCOME SCREEN
-    document.getElementById("inventoryButton").style.display = "block";
+    document.getElementById("inventoryButton").style.display = "none";
+
+    localStorage.clear();
 
 }
 
