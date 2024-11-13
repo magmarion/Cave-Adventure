@@ -112,7 +112,8 @@ function showScene(scene) {
         case "criticalMoment":
             sceneText = `As the player ventures deeper, a chilling presence fills the air. 
             The darkness feels alive, as if something unseen trails behind. 
-            They reach a spot where the walls are clawed with strange marks and unsettling tracks—signs of recent visitors...or perhaps something far more menacing.
+            They reach a spot where the walls are clawed with strange marks and unsettling 
+            tracks—signs of recent visitors...or perhaps something far more menacing.
             `;
 
             typeText(sceneText, () => {
@@ -120,7 +121,13 @@ function showScene(scene) {
             });
             break;
 
-        case "success":
+        case "escapeEnding":
+            showEndScreen(
+                "Congratulations!",
+                "You have succesfully escaped the cave!",
+                "media/escapeScene.webp"
+            );
+            break;
             
     }
 }
@@ -158,7 +165,7 @@ function eventTextAndButtons(scene) {
         case "now_or_never":
             eventText = 'The red eyes glowed in the darkness, freezing the young man in horror. His heart pounded so fiercely, it felt ready to burst."';
             options.innerHTML = `
-                <button onclick="selectPath('turnBack')" class="fade-in">Leave The Cave</button>
+                <button onclick="selectPath('leaveCave')" class="fade-in">Leave The Cave</button>
             `;
             break;
 
@@ -191,6 +198,8 @@ function selectPath(choice) {
         confirmation = confirm("Sure with your choice?");
     } else if (choice === "rockyRoad") {
         confirmation = confirm("You're about to choose The Rocky Road")
+    } else if (choice === "leaveCave") {
+        confirmation = confirm("You're about to leave the cave");
     }
 
     if (confirmation) {
@@ -210,6 +219,10 @@ function selectPath(choice) {
             case "rockyRoad":
                 showScene("rockyRoad");
                 break;
+            case "leaveCave":
+                showScene("escapeEnding");
+            break;
+
         }
 
     } else {
@@ -263,12 +276,22 @@ function typeText(text, callback) {
     let letterIndex = 0;
     const typingSpeed = 3;
 
+    // TODO : Add typing sound
+    // const typingSound = new Audio("media/typingSound.mp3");
+    // typingSound.loop = ture;
+
+    // typingSound.play();
+
     function type() {
         if (letterIndex < text.length) {
             narrationText.textContent += text[letterIndex];
             letterIndex++;
             setTimeout(type, typingSpeed);
         } else {
+
+            // TODO : Add typing sound
+            // typingSound.pause();
+            // typingSound.currentTime = 0;
 
             /* when the text is finished, call the callback function to manipulate the DOM */
             if (callback) callback();
@@ -277,16 +300,6 @@ function typeText(text, callback) {
 
     type();
 }
-
-// function eventText() {
-
-// }
-
-
-
-
-
-
 
 function showPopupMessage(message) {
     const popup = document.getElementById("popupMessage");
@@ -340,6 +353,36 @@ function readInscription() {
     `;
 }
 
+
+// ! NEW FUNCTIONS START
+function showEndScreen(title, message, backgroundUrl) {
+    document.getElementById("endTitle").innerText = title;
+    document.getElementById("endMessage").innerText = message;
+
+    const endScreen = document.getElementById("endScreen");
+    if(backgroundUrl) {
+        endScreen.style.backgroundImage = `url('${backgroundUrl}')`;
+    }
+
+    document.getElementById("sceneContainer").style.display = "none";
+    endScreen.style.display ="flex";
+
+    document.getElementById("inventoryButton").style.display = "none";
+
+}
+
+function restartGame() {
+    document.getElementById("endScreen").style.display = "none";
+
+    document.getElementById("title").style.display = "block";
+    document.getElementById("startScreen").style.display = "block";
+
+// ! MAKE THE INVENTORY BUTTON VISIBLE AGAIN ONCE THE PLAYER IS CLICKED ON THE START GAME BUTTON NOT ON WELCOME SCREEN
+    document.getElementById("inventoryButton").style.display = "block";
+
+}
+
+// ! NEW FUNCTIONS END
 
 function addToInventory(...items) {
     let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
