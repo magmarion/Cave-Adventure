@@ -20,6 +20,19 @@ body {
     font-family: 'Cairo', sans-serif;
 }
 
+#endScreen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-size: cover;
+    color: #ffffff;
+    font-size: 2rem;
+    text-align: center;
+    height: 100vh;
+    width: 100vw;
+}
+
 h1 {
     font-family: "VT323", monospace;
     background-image: url(https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmxhN2pjaGp4MmZtanZmc2VkcDEzYnd5bms5dTF6cGo4ZWZyMWkxcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/TjSaNRzMZyrk6KCQOb/giphy-downsized-large.gif);
@@ -50,9 +63,10 @@ h1 {
 
 #blurred-box {
     background: rgba(0, 0, 0, 0.7);
-    border-radius: 50px;
+    border-radius: 80px;
     padding: 20px;
     text-align: center;
+    margin: 15%;
 }
 
 #inventoryButton {
@@ -114,6 +128,8 @@ h1 {
     font-size: x-large;
     text-transform: uppercase;
     color: rgb(255, 68, 51);
+    width: 80%;
+    margin: 0 auto;
 }
 
 .oldSageText {
