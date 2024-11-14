@@ -65,7 +65,7 @@ function showScene(scene) {
                 options.innerHTML += `
                     <div class="button-container">
                         <button onclick="listenToTheOldMan()" class="fade-in">Ask For Advice</button>
-                        <button onclick="showScene('narrationAfterExplore')" class="fade-in">Continue Journey</button>
+                        <button onclick="showScene('narrationAfterExplore')" class="fade-in">Venture</button>
                     </div>
                 `;
                 setTimeout(fadeInContent, 100);
@@ -82,6 +82,41 @@ function showScene(scene) {
 
             break;
 
+        case "narrowPassage":
+            sceneText = `You crawl into the narrow passage, breathing slowly to keep yourself calm. 
+            The walls are cold and sticky, and every movement feels difficult and claustrophobic. 
+            Suddenly you feel something touch your arm – a cluster of small, poisonous spiders. You flinch, but manage to stay calm enough to press on. 
+            When you finally reach the exit, you see an ancient stone with a clear carving - the final clue to the treasure!
+            `;
+            typeText(sceneText, () => {
+                narration.innerHTML += `
+                    <div class="button-container">
+                        <button onclick="showScene('treasureEnding')" class="fade-in">Discover The Treasure!</button>
+                    </div>
+                `;
+                setTimeout(fadeInContent, 100);
+
+            });
+            break;
+
+        case "rockyRoad":
+            sceneText = `You choose the wider, rocky road, convinced that it is safer. 
+            The road slopes downwards and becomes increasingly uneven. Suddenly you hear a rumbling sound – pebbles and rocks start falling around you.
+            You rush forward, but a large rock comes loose and blocks your way back. 
+            The ground shakes, and before you can react, you slip on the slippery rock. 
+            You grope for grip, but fall hard, the world disappearing in a moment of chaos and darkness.
+            `;
+
+            typeText(sceneText, () => {
+                narration.innerHTML += `
+                    <div class="button-container">
+                        <button onclick="showScene('sadEnding')" class="fade-in">Continue</button>
+                    </div>
+                `;
+                setTimeout(fadeInContent, 100);
+            });
+            break;
+
         case "ignore":
             sceneText = `While the faint whisper still echoes in the air, the character feels a chilly wind sweep through the cave. 
             Something makes you hesitate the feeling of following the whisper feels dangerous, and maybe even unnecessary.
@@ -92,15 +127,15 @@ function showScene(scene) {
                 narration.innerHTML += `
                     <div class="button-container">
                         <button onclick="readInscription()" class="fade-in">Read The Scripture</button>
-                        <button onclick="showScene('nextScene')" class="fade-in">Continue Journey</button>
+                        <button onclick="showScene('nextSceneInIgnorePath')" class="fade-in">Continue</button>
                     </div>
                 `;
                 setTimeout(fadeInContent, 100);
             });
             break;
 
-        case "nextScene":
-            sceneText = `The player, unable to decipher the cryptic message, continues their journey. 
+        case "nextSceneInIgnorePath":
+            sceneText = `The player, unable to decipher the cryptic message, continues his journey. 
             The air grows colder, the shadows longer. As the path twists and turns, uncertainty creeps in. 
             `;
 
@@ -128,11 +163,28 @@ function showScene(scene) {
 
         case "escapeEnding":
             showEndScreen(
-                "Congratulations!",
+                "Survived!",
                 "You have succesfully escaped the cave!",
                 "media/escapeScene.webp"
             );
             break;
+
+        case "treasureEnding":
+            showEndScreen(
+                "Congratulations!",
+                "You just found the legendary treasure!",
+                "media/treasure.webp",
+            );
+            break;
+
+        case "sadEnding":
+            showEndScreen(
+                "You Died!",
+                "The rocky road turned out to be more treacherous than you could have ever imagined. The cave remains a mystery, and the treasure undiscovered.",
+                "media/sadEnding.png"
+            );
+            break;
+
             
     }
 }
@@ -170,7 +222,7 @@ function eventTextAndButtons(scene) {
         case "now_or_never":
             eventText = 'The red eyes glowed in the darkness, freezing the young man in horror. His heart pounded so fiercely, it felt ready to burst."';
             options.innerHTML = `
-                <button onclick="selectPath('leaveCave')" class="fade-in">Leave The Cave</button>
+                <button onclick="showScene('escapeEnding')" class="fade-in">Leave The Cave</button>
             `;
             break;
 
@@ -200,11 +252,9 @@ function selectPath(choice) {
     } else if (choice === "ignore") {
         confirmation = confirm("Are you sure you want to ignore the whisper?");
     } else if (choice === "narrowPassage") {
-        confirmation = confirm("Sure with your choice?");
+        confirmation = confirm("You're about to go through The Rocky Road");
     } else if (choice === "rockyRoad") {
-        confirmation = confirm("You're about to choose The Rocky Road")
-    } else if (choice === "leaveCave") {
-        confirmation = confirm("You're about to leave the cave");
+        confirmation = confirm("You're about to go through The Rocky Road");
     }
 
     if (confirmation) {
@@ -224,10 +274,6 @@ function selectPath(choice) {
             case "rockyRoad":
                 showScene("rockyRoad");
                 break;
-            case "leaveCave":
-                showScene("escapeEnding");
-            break;
-
         }
 
     } else {
@@ -235,8 +281,6 @@ function selectPath(choice) {
 
     }
 }
-
-
 
 function changeBackground(scene) {
     const body = document.body;
@@ -256,11 +300,17 @@ function changeBackground(scene) {
         case "narrationAfterExplore":
             body.style.backgroundImage = "url('media/into_depper.webp')";
             break;
-        case "nextScene":
+        case "nextSceneInIgnorePath":
             body.style.backgroundImage = "url('media/nextScene.webp')";
             break;
         case "criticalMoment":
             body.style.backgroundImage = "url('media/leave_cave.webp')";
+            break;
+        case "narrowPassage":
+            body.style.backgroundImage = "url('media/narrowPassage.webp')";
+            break;
+        case "rockyRoad":
+            body.style.backgroundImage = "url('media/rockyRoad.webp')";
             break;
         default:
             body.style.backgroundImage = "";
@@ -279,9 +329,8 @@ function typeText(text, callback) {
     narrationText.style.display = "block"; /* Show the story text */
 
     let letterIndex = 0;
-    const typingSpeed = 10;
+    const typingSpeed = 2;
 
-    // TODO : Add typing sound
     const typingSound = new Audio("media/typingSound.mp3");
     typingSound.loop = true;
 
@@ -294,7 +343,6 @@ function typeText(text, callback) {
             setTimeout(type, typingSpeed);
         } else {
 
-            // TODO : Add typing sound
             typingSound.pause();
             typingSound.currentTime = 0;
 
@@ -382,11 +430,9 @@ function restartGame() {
     document.getElementById("title").style.display = "block";
     document.getElementById("startScreen").style.display = "block";
 
-// ! MAKE THE INVENTORY BUTTON VISIBLE AGAIN ONCE THE PLAYER IS CLICKED ON THE START GAME BUTTON NOT ON WELCOME SCREEN
     document.getElementById("inventoryButton").style.display = "none";
 
     localStorage.clear();
-
 }
 
 // ! NEW FUNCTIONS END
