@@ -2,11 +2,15 @@ window.addEventListener("DOMContentLoaded", main);
 
 
 function main() {
-    // loadStateFromLs();
-    // startGame();
     
 }
 
+/**
+ * Initializes the game by hiding the title and start screen, displaying the main game interface,
+ * and setting up initial game elements. This includes showing the inventory button, adding initial items
+ * to the inventory, changing the background to the story scene, and starting the first scene's narration
+ * with a typing effect.
+ */
 function startGame() {
     
     document.getElementById("title").style.display = "none";
@@ -20,13 +24,13 @@ function startGame() {
     
     addToInventory("map", "torch", "rope");
     
-
-
-    /* Change the background for the first scene */
     changeBackground('story');
 
     /*Define the text for the first scene */
-    const storyText = `A young man wakes up in a dark cave, alone and disoriented. The only thing he remembers is a mysterious map hidden in his pocket, showing the way to a legendary treasure, the lost ark.`;
+    const storyText = `A young man wakes up in a dark cave, alone and disoriented. 
+        The only thing he remembers is a mysterious map hidden in his pocket, 
+        showing the way to a legendary treasure, the lost ark.
+    `;
 
     /* Start the typing for the first scene */
     typeText(storyText, () => {
@@ -35,6 +39,15 @@ function startGame() {
 }
 
 
+/**
+ * Displays the specified scene by updating the game interface elements, including narration,
+ * events, and options. Clears previous scene content, changes the background to match the scene,
+ * and sets the text and interactive elements based on the scene type. Handles different game
+ * states such as narration, exploration, and endings, providing corresponding text and options.
+ *
+ * @param {string} scene - Identifier for the scene to display, determining the content and
+ *                         interactions to be presented.
+ */
 function showScene(scene) {
     const narration = document.getElementById("narration");
     const events = document.getElementById("events");
@@ -165,15 +178,16 @@ function showScene(scene) {
             showEndScreen(
                 "Survived!",
                 "You have succesfully escaped the cave!",
-                "media/escapeScene.webp"
+                "escapeEnding"
             );
+            
             break;
 
         case "treasureEnding":
             showEndScreen(
                 "Congratulations!",
                 "You just found the legendary treasure!",
-                "media/treasure.webp",
+                "treasureEnding"
             );
             break;
 
@@ -181,7 +195,7 @@ function showScene(scene) {
             showEndScreen(
                 "You Died!",
                 "The rocky road turned out to be more treacherous than you could have ever imagined. The cave remains a mystery, and the treasure undiscovered.",
-                "media/sadEnding.png"
+                "sadEnding"
             );
             break;
 
@@ -190,12 +204,24 @@ function showScene(scene) {
 }
 
 
+/**
+ * Sets up the text and buttons for a given event scene.
+ * @param {string} scene - The name of the scene to set up.
+ */
 function eventTextAndButtons(scene) {
     const events = document.getElementById("events");
     const options = document.getElementById("options");
 
+    // TODO
+    // const items = document.getElementById("items");
+
+
     events.innerHTML = "";
     options.innerHTML = "";
+
+    // TODO
+    // items.innerHTML = "";
+
 
     let eventText = "";
 
@@ -206,16 +232,18 @@ function eventTextAndButtons(scene) {
         case 'explore':
             eventText = "...A strange whisper is heard...";
             options.innerHTML = `
-                <button onclick="selectPath('explore')" class="fade-in">EXPLORE</button>
-                <button onclick="selectPath('ignore')" class="fade-in">IGNORE</button>   
+                <button onclick="playClickSound(); selectPath('explore')" class="fade-in">EXPLORE</button>
+                <button onclick="playClickSound(); selectPath('ignore')" class="fade-in">IGNORE</button>   
             `;
+
+
             break;
 
         case 'crossroads':
             eventText = "...Squeeze through or crush your toes? That is the question....";
             options.innerHTML = `
-                <button onclick="selectPath('narrowPassage')" class="fade-in">The Narrow Passage</button>
-                <button onclick="selectPath('rockyRoad')" class="fade-in">The Rocky Road</button>
+                <button onclick="playClickSound(); selectPath('narrowPassage')" class="fade-in">The Narrow Passage</button>
+                <button onclick="playClickSound(); selectPath('rockyRoad')" class="fade-in">The Rocky Road</button>
             `;
             break;
 
@@ -235,6 +263,10 @@ function eventTextAndButtons(scene) {
     fadeInContent();
 }
 
+/**
+ * Fade in all elements with class 'fade-in' with a short delay in between,
+ * to create a staggered animation effect.
+ */
 function fadeInContent() {
     const buttons = document.querySelectorAll('.fade-in');
     buttons.forEach((button, index) => {
@@ -244,6 +276,13 @@ function fadeInContent() {
     });
 }
 
+/**
+ * Presents a confirmation dialog based on the player's chosen path and, upon confirmation, 
+ * updates the scene accordingly. If the player cancels the action, a cancellation message is shown.
+ * 
+ * @param {string} choice - The path choice made by the player. Can be "explore", "ignore", 
+ * "narrowPassage", or "rockyRoad".
+ */
 function selectPath(choice) {
     let confirmation;
 
@@ -282,6 +321,12 @@ function selectPath(choice) {
     }
 }
 
+/**
+ * Changes the background image of the body based on the scene name passed in.
+ * 
+ * @param {string} scene - The name of the scene. The background image will be changed to the one 
+ *                         associated with this scene.
+ */
 function changeBackground(scene) {
     const body = document.body;
 
@@ -312,6 +357,20 @@ function changeBackground(scene) {
         case "rockyRoad":
             body.style.backgroundImage = "url('media/rockyRoad.webp')";
             break;
+
+        case "escapeEnding":
+            body.style.backgroundImage = "url('media/escapeScene.webp')";
+            break;
+        case "treasureEnding":
+            body.style.backgroundImage = "url('media/treasure.webp')";
+            break;
+        case "sadEnding":
+            body.style.backgroundImage = "url('media/sadEnding.png')";
+            break;
+        case "startScreen":
+            body.style.backgroundImage = "url('media/black.jpeg')";
+            break;
+
         default:
             body.style.backgroundImage = "";
             break;
@@ -323,6 +382,14 @@ function changeBackground(scene) {
 
 }
 
+/**
+ * Types out the given text on the narration element with a typing effect,
+ * playing a typing sound during the effect. Once the typing is complete,
+ * it pauses the sound and executes the provided callback function.
+ *
+ * @param {string} text - The text content to be typed out in the narration element.
+ * @param {function} callback - A function to be called after the typing effect is complete.
+ */
 function typeText(text, callback) {
     const narrationText = document.getElementById("narration");
     narrationText.textContent = "";
@@ -354,6 +421,12 @@ function typeText(text, callback) {
     type();
 }
 
+/**
+ * Shows a popup message with the given message. The popup is animated to appear and disappear
+ * after 3 seconds. If the message is empty, the popup is not shown.
+ * 
+ * @param {string} message - The message to be displayed in the popup.
+ */
 function showPopupMessage(message) {
     const popup = document.getElementById("popupMessage");
     popup.innerText = message;
@@ -379,6 +452,10 @@ function showPopupMessage(message) {
 const audio = new Audio('media/wiseManSaid.mp3');
 let isPlaying = false;
 
+/**
+ * Toggles the playback of the audio clip with the wise man's voice. If the audio is
+ * currently playing, it is paused. If it is currently paused, it is played.
+ */
 function listenToTheOldMan() {
     isPlaying ? audio.pause() : audio.play();
 
@@ -391,8 +468,22 @@ function listenToTheOldMan() {
     }
 }
 
+const clickSound = new Audio('media/buttonClickSound.mp3');
+
+/**
+ * Plays the click sound effect when a button is pressed.
+ */
+function playClickSound() {
+    clickSound.play();
+}
 
 
+
+
+/**
+ * Reads the inscription on the stone and displays its content to the player.
+ * The inscription hints at the location of the key to the treasure.
+ */
 function readInscription() {
     const narration = document.getElementById("narration");
     const options = document.getElementById("options");
@@ -407,23 +498,35 @@ function readInscription() {
 }
 
 
-// ! NEW FUNCTIONS START
-function showEndScreen(title, message, backgroundUrl) {
-    document.getElementById("endTitle").innerText = title;
-    document.getElementById("endMessage").innerText = message;
+/**
+ * Displays the ending screen with the specified title and message. The ending screen
+ * is only shown after a delay of 1 second, and the scene container is hidden.
+ * 
+ * @param {string} title - The title to be displayed on the ending screen.
+ * @param {string} message - The message to be displayed on the ending screen.
+ * @param {string} scene - The background scene to display on the ending screen.
+ */
+function showEndScreen(title, message, scene) {
 
-    const endScreen = document.getElementById("endScreen");
-    if(backgroundUrl) {
-        endScreen.style.backgroundImage = `url('${backgroundUrl}')`;
-    }
+        document.getElementById("endTitle").innerText = title;
+        document.getElementById("endMessage").innerText = message;
+    
+        const endScreen = document.getElementById("endScreen");
+    
+        document.getElementById("sceneContainer").style.display = "none";
+        endScreen.style.display ="flex";
+    
+        document.getElementById("inventoryButton").style.display = "none";
 
-    document.getElementById("sceneContainer").style.display = "none";
-    endScreen.style.display ="flex";
-
-    document.getElementById("inventoryButton").style.display = "none";
+        changeBackground(scene);
 
 }
 
+/**
+ * Hides the ending screen and shows the title and start screen again.
+ * Also hides the inventory button and changes the background to the start screen background.
+ * Finally, clears local storage.
+ */
 function restartGame() {
     document.getElementById("endScreen").style.display = "none";
 
@@ -432,11 +535,18 @@ function restartGame() {
 
     document.getElementById("inventoryButton").style.display = "none";
 
+    changeBackground("startScreen");
+
     localStorage.clear();
 }
 
-// ! NEW FUNCTIONS END
 
+/**
+ * Adds the given items to the player's inventory. If the item is not already in the inventory,
+ * it is added and a popup message is shown to the player. The inventory is then saved to local storage.
+ * 
+ * @param {...string} items - The items to add to the inventory.
+ */
 function addToInventory(...items) {
     let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
 
@@ -453,27 +563,52 @@ function addToInventory(...items) {
 }
 
 
+/**
+ * Retrieves the player's inventory from local storage.
+ * 
+ * @returns {Array} An array containing the items in the player's inventory. 
+ *                  Returns an empty array if no inventory is found.
+ */
 function getInventory() {
     return JSON.parse(localStorage.getItem('inventory')) || [];
 }
 
+/**
+ * Removes the specified item from the player's inventory. If the item exists in the inventory,
+ * it is removed and the updated inventory is saved to local storage.
+ * 
+ * @param {string} item - The item to be removed from the inventory.
+ */
 function removeFromInventory(item) {
     let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
     inventory = inventory.filter(i => i !== item);
     localStorage.setItem('inventory', JSON.stringify(inventory));
 }
 
+/**
+ * Shows the player's current inventory in an alert box.
+ */
 function showInventory() {
     const inventory = getInventory();
     alert(`inventory: ${inventory.length ? inventory.join(', ') : 'Empty'}`);
 }
 
+/**
+ * Adds the specified item to the player's inventory and shows the current inventory.
+ * 
+ * @param {string} item - The item to be added to the inventory.
+ */
 function pickUpItem(item) {
     addToInventory(item);
     showInventory();
 }
 
 
+/**
+ * Creates and shows the inventory button if it does not exist.
+ * The button is appended to the body and has the id "inventoryButton".
+ * The button's text is "Inventory" and it calls the showInventory function when clicked.
+ */
 function showInventoryButton() {
 
     if (!document.getElementById("inventoryButton")) {
@@ -487,3 +622,32 @@ function showInventoryButton() {
 
     }
 }
+
+
+// ! Affecting the buttons
+// function showItem(itemName, itemImageURL) {
+//     const itemsContainer = document.getElementById("item");
+
+//     const img = document.createElement("img");
+//     img.src = itemImageURL;
+//     img.alt = itemName;
+//     img.title = `Click to pick up ${itemName}`;
+//     img.classList.add("item");
+
+//     img.onclick = function () {
+//         addToInventory(itemName);
+//         img.remove();
+//         showPopupMessage(`${itemName} added to inventory!`);
+//     };
+
+//     itemsContainer.appendChild(img);
+
+// }
+
+// function showPopupMessage(message) {
+//     alert(message);
+// }
+
+// showItem("torch", "media/torch.png");
+
+
