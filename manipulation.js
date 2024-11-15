@@ -1,9 +1,10 @@
-window.addEventListener("DOMContentLoaded", main);
+// window.addEventListener("DOMContentLoaded", main);
 
 
-function main() {
+
+// function main() {
     
-}
+// }
 
 /**
  * Initializes the game by hiding the title and start screen, displaying the main game interface,
@@ -18,11 +19,8 @@ function startGame() {
     
     /* Show the game interface */
     document.getElementById("sceneContainer").style.display = "flex";
-    
-    showInventoryButton();
-    document.getElementById("inventoryButton").style.display = "block";
-    
-    addToInventory("map", "torch", "rope");
+        
+    // addToInventory("map", "torch", "rope");
     
     changeBackground('story');
 
@@ -80,6 +78,7 @@ function showScene(scene) {
                         <button onclick="listenToTheOldMan()" class="fade-in">Ask For Advice</button>
                         <button onclick="showScene('narrationAfterExplore')" class="fade-in">Venture</button>
                     </div>
+                    <img id="torchImage" src="media/torch.png" class="fade-in" onclick="pickUpItem('torch')" alt="torch" style="width: 50px; cursor: pointer;"/>
                 `;
                 setTimeout(fadeInContent, 100);
 
@@ -96,38 +95,54 @@ function showScene(scene) {
             break;
 
         case "narrowPassage":
-            sceneText = `You crawl into the narrow passage, breathing slowly to keep yourself calm. 
-            The walls are cold and sticky, and every movement feels difficult and claustrophobic. 
-            Suddenly you feel something touch your arm – a cluster of small, poisonous spiders. You flinch, but manage to stay calm enough to press on. 
-            When you finally reach the exit, you see an ancient stone with a clear carving - the final clue to the treasure!
-            `;
-            typeText(sceneText, () => {
-                narration.innerHTML += `
-                    <div class="button-container">
-                        <button onclick="showScene('treasureEnding')" class="fade-in">Discover The Treasure!</button>
-                    </div>
+            if (getInventory().includes("torch")) {
+                sceneText = `You crawl into the narrow passage, breathing slowly to keep yourself calm. 
+                The walls are cold and sticky, and every movement feels difficult and claustrophobic. 
+                Suddenly you feel something touch your arm – a cluster of small, poisonous spiders. You flinch, but manage to stay calm enough to press on. 
+                When you finally reach the exit, you see an ancient stone with a clear carving - the final clue to the treasure!
                 `;
-                setTimeout(fadeInContent, 100);
-
-            });
+                typeText(sceneText, () => {
+                    narration.innerHTML += `
+                        <div class="button-container">
+                            <button onclick="showScene('treasureEnding')" class="fade-in">Discover The Treasure!</button>
+                        </div>
+                    `;
+                    setTimeout(fadeInContent, 100);
+    
+                });
+            } else {
+                sceneText = `Without a torch, the narrow passage is too dark to navigate.
+                You stumble, and the ground gives way beneath you.`;
+                typeText(sceneText, () => {
+                    showEndScreen("You Died", "You couldn't make it through the narrow passage without a torch.", "sadEnding");
+                });
+            }
             break;
 
         case "rockyRoad":
-            sceneText = `You choose the wider, rocky road, convinced that it is safer. 
-            The road slopes downwards and becomes increasingly uneven. Suddenly you hear a rumbling sound – pebbles and rocks start falling around you.
-            You rush forward, but a large rock comes loose and blocks your way back. 
-            The ground shakes, and before you can react, you slip on the slippery rock. 
-            You grope for grip, but fall hard, the world disappearing in a moment of chaos and darkness.
-            `;
+            if (getInventory().includes("rope")) {
 
-            typeText(sceneText, () => {
-                narration.innerHTML += `
-                    <div class="button-container">
-                        <button onclick="showScene('sadEnding')" class="fade-in">Continue</button>
-                    </div>
+                sceneText = `You choose the wider, rocky road, convinced that it is safer. 
+                The road slopes downwards and becomes increasingly uneven. Suddenly you hear a rumbling sound – pebbles and rocks start falling around you.
+                You rush forward, but a large rock comes loose and blocks your way back. 
+                The ground shakes, and before you can react, you slip on the slippery rock. 
+                You grope for grip, but fall hard, the world disappearing in a moment of chaos and darkness.
                 `;
-                setTimeout(fadeInContent, 100);
-            });
+                typeText(sceneText, () => {
+                    narration.innerHTML += `
+                        <div class="button-container">
+                            <button onclick="showScene('treasureEnding')" class="fade-in">Continue your journey</button>
+                        </div>
+                    `;
+                    setTimeout(fadeInContent, 100);
+    
+                });
+            } else {
+                sceneText = `The rocky road proves too treacherous without a rope to help you climb. You slip and fall to your death.`;
+                typeText(sceneText, () => {
+                    showEndScreen("You Died", "Without the rope, you couldn't make it across the rocky road.", "sadEnding");
+                });
+            }
             break;
 
         case "ignore":
@@ -212,15 +227,8 @@ function eventTextAndButtons(scene) {
     const events = document.getElementById("events");
     const options = document.getElementById("options");
 
-    // TODO
-    // const items = document.getElementById("items");
-
-
     events.innerHTML = "";
     options.innerHTML = "";
-
-    // TODO
-    // items.innerHTML = "";
 
 
     let eventText = "";
@@ -230,6 +238,7 @@ function eventTextAndButtons(scene) {
 
     switch (scene) {
         case 'explore':
+
             eventText = "...A strange whisper is heard...";
             options.innerHTML = `
                 <button onclick="playClickSound(); selectPath('explore')" class="fade-in">EXPLORE</button>
@@ -245,6 +254,7 @@ function eventTextAndButtons(scene) {
                 <button onclick="playClickSound(); selectPath('narrowPassage')" class="fade-in">The Narrow Passage</button>
                 <button onclick="playClickSound(); selectPath('rockyRoad')" class="fade-in">The Rocky Road</button>
             `;
+
             break;
 
         case "now_or_never":
@@ -477,9 +487,6 @@ function playClickSound() {
     clickSound.play();
 }
 
-
-
-
 /**
  * Reads the inscription on the stone and displays its content to the player.
  * The inscription hints at the location of the key to the treasure.
@@ -588,10 +595,10 @@ function removeFromInventory(item) {
 /**
  * Shows the player's current inventory in an alert box.
  */
-function showInventory() {
-    const inventory = getInventory();
-    alert(`inventory: ${inventory.length ? inventory.join(', ') : 'Empty'}`);
-}
+// function showInventory() {
+//     const inventory = getInventory();
+//     alert(`inventory: ${inventory.length ? inventory.join(', ') : 'Empty'}`);
+// }
 
 /**
  * Adds the specified item to the player's inventory and shows the current inventory.
@@ -599,55 +606,7 @@ function showInventory() {
  * @param {string} item - The item to be added to the inventory.
  */
 function pickUpItem(item) {
-    addToInventory(item);
-    showInventory();
+    addToInventory("torch");
+    document.getElementById("torchImage").style.display = "none";
 }
-
-
-/**
- * Creates and shows the inventory button if it does not exist.
- * The button is appended to the body and has the id "inventoryButton".
- * The button's text is "Inventory" and it calls the showInventory function when clicked.
- */
-function showInventoryButton() {
-
-    if (!document.getElementById("inventoryButton")) {
-        const inventoryButton = document.createElement("button");
-        inventoryButton.id = "inventoryButton";
-        inventoryButton.innerText = "Inventory";
-        inventoryButton.onclick = showInventory;
-
-        /* Place the button somewhere */
-        document.body.appendChild(inventoryButton);
-
-    }
-}
-
-
-// ! Affecting the buttons
-// function showItem(itemName, itemImageURL) {
-//     const itemsContainer = document.getElementById("item");
-
-//     const img = document.createElement("img");
-//     img.src = itemImageURL;
-//     img.alt = itemName;
-//     img.title = `Click to pick up ${itemName}`;
-//     img.classList.add("item");
-
-//     img.onclick = function () {
-//         addToInventory(itemName);
-//         img.remove();
-//         showPopupMessage(`${itemName} added to inventory!`);
-//     };
-
-//     itemsContainer.appendChild(img);
-
-// }
-
-// function showPopupMessage(message) {
-//     alert(message);
-// }
-
-// showItem("torch", "media/torch.png");
-
 
