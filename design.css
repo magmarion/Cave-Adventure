@@ -43,8 +43,7 @@ h1 {
     font-size: 6rem;
     text-align: center;
     letter-spacing: 1px;
-    line-height: 1.4;
-    /* ! look for code above later */
+    line-height: 1.4em;
     margin: 20px 0;
     text-transform: uppercase;
 }
@@ -53,7 +52,6 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* background-image: url('cave.webp'); */
     background-size: cover;
     background-position: center;
     width: 100vw;
@@ -198,17 +196,20 @@ button:hover {
         padding: 10px;
     }
 
-    #narration, .eventTextStyle {
+    #narration,
+    .eventTextStyle {
         width: 90%;
         font-size: 1rem;
-        line-height: 1.4rem;;
+        line-height: 1.4rem;
+        ;
     }
 
     h1 {
         font-size: 4rem;
     }
 
-    button, #inventoryButton {
+    button,
+    #inventoryButton {
         font-size: 1.2rem;
         padding: 8px 15px;
     }
@@ -220,7 +221,8 @@ button:hover {
 
     #popupMessage {
         width: 90%;
-        font-size: 1rem;;
+        font-size: 1rem;
+        ;
     }
 }
 
@@ -230,17 +232,20 @@ button:hover {
         font-size: 1rem;
     }
 
-    #narration, .eventTextStyle {
+    #narration,
+    .eventTextStyle {
         width: 85%;
         font-size: 1.2rem;
-        line-height: 1.5rem;;
+        line-height: 1.5rem;
+        ;
     }
 
     h1 {
         font-size: 5rem;
     }
 
-    button, #inventoryButton {
+    button,
+    #inventoryButton {
         font-size: 1.4rem;
         padding: 10px 18px;
     }
@@ -252,7 +257,8 @@ button:hover {
 
     #popupMessage {
         width: 80%;
-        font-size: 1.2rem;;
+        font-size: 1.2rem;
+        ;
     }
 }
 
@@ -262,17 +268,20 @@ button:hover {
         font-size: 1.2rem;
     }
 
-    #narration, .eventTextStyle {
+    #narration,
+    .eventTextStyle {
         width: 75%;
         font-size: 1.5rem;
-        line-height: 1.6rem;;
+        line-height: 1.6rem;
+        ;
     }
 
     h1 {
         font-size: 6rem;
     }
 
-    button, #inventoryButton {
+    button,
+    #inventoryButton {
         font-size: 1.7rem;
         padding: 10px 20px;
     }
@@ -283,6 +292,7 @@ button:hover {
 
     #popupMessage {
         width: 70%;
-        font-size: 1.3rem;;
+        font-size: 1.3rem;
+        ;
     }
 }

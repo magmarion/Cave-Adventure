@@ -1,10 +1,3 @@
-// window.addEventListener("DOMContentLoaded", main);
-
-
-
-// function main() {
-    
-// }
 
 /**
  * Initializes the game by hiding the title and start screen, displaying the main game interface,
@@ -13,51 +6,42 @@
  * with a typing effect.
  */
 function startGame() {
-    
+
     document.getElementById("title").style.display = "none";
     document.getElementById("startScreen").style.display = "none";
-    
+
     /* Show the game interface */
     document.getElementById("sceneContainer").style.display = "flex";
-        
-    // addToInventory("map", "torch", "rope");
-    
     changeBackground('story');
 
-    /*Define the text for the first scene */
     const storyText = `A young man wakes up in a dark cave, alone and disoriented. 
         The only thing he remembers is a mysterious map hidden in his pocket, 
         showing the way to a legendary treasure, the lost ark.
     `;
 
-    /* Start the typing for the first scene */
     typeText(storyText, () => {
         setTimeout(() => eventTextAndButtons('explore'), 500);
     });
 }
 
-
 /**
- * Displays the specified scene by updating the game interface elements, including narration,
- * events, and options. Clears previous scene content, changes the background to match the scene,
- * and sets the text and interactive elements based on the scene type. Handles different game
- * states such as narration, exploration, and endings, providing corresponding text and options.
+ * Shows a given scene in the game, by clearing any previous narration and events, setting the background
+ * to the scene's associated background image, and displaying the scene's text and buttons. The scene is
+ * determined by the "scene" argument passed in.
  *
- * @param {string} scene - Identifier for the scene to display, determining the content and
- *                         interactions to be presented.
+ * @param {string} scene - The scene to show. This can be any of the scene names defined in the game.
  */
 function showScene(scene) {
     const narration = document.getElementById("narration");
     const events = document.getElementById("events");
     const options = document.getElementById("options");
 
-    narration.innerHTML = ""; /* Clear previous narration */
-    events.innerHTML = ""; /* Clear previous buttons */
-    options.innerHTML = ""; /* Clear previous buttons */
+    narration.innerHTML = "";
+    events.innerHTML = "";
+    options.innerHTML = "";
 
     changeBackground(scene);
 
-    /* Define the text  based on the scene */
     let sceneText = "";
 
     switch (scene) {
@@ -108,14 +92,12 @@ function showScene(scene) {
                         </div>
                     `;
                     setTimeout(fadeInContent, 100);
-    
+
                 });
             } else {
                 sceneText = `Without a torch, the narrow passage is too dark to navigate.
                 You stumble, and the ground gives way beneath you.`;
-                typeText(sceneText, () => {
-                    showEndScreen("You Died", "You couldn't make it through the narrow passage without a torch.", "sadEnding");
-                });
+                setTimeout(() => showEndScreen("You Died", "You couldn't make it through the narrow passage without a torch.", "sadEnding"), 10);
             }
             break;
 
@@ -135,13 +117,12 @@ function showScene(scene) {
                         </div>
                     `;
                     setTimeout(fadeInContent, 100);
-    
+
                 });
             } else {
                 sceneText = `The rocky road proves too treacherous without a rope to help you climb. You slip and fall to your death.`;
-                typeText(sceneText, () => {
-                    showEndScreen("You Died", "Without the rope, you couldn't make it across the rocky road.", "sadEnding");
-                });
+                setTimeout(() => showEndScreen("You Died", "Without the rope, you couldn't make it across the rocky road.", "sadEnding"), 10);
+
             }
             break;
 
@@ -195,7 +176,7 @@ function showScene(scene) {
                 "You have succesfully escaped the cave!",
                 "escapeEnding"
             );
-            
+
             break;
 
         case "treasureEnding":
@@ -214,14 +195,21 @@ function showScene(scene) {
             );
             break;
 
-            
+
     }
 }
 
 
+
 /**
- * Sets up the text and buttons for a given event scene.
- * @param {string} scene - The name of the scene to set up.
+ * Displays event text and buttons for a given scene, and applies a fade-in effect.
+ * Clears any previous event text and options, then sets up new content based on
+ * the provided scene. The buttons trigger specific actions or scene changes
+ * when clicked.
+ *
+ * @param {string} scene - The current scene identifier, determining the text and
+ *                         options to be displayed. Possible values include 'explore',
+ *                         'crossroads', 'now_or_never', etc.
  */
 function eventTextAndButtons(scene) {
     const events = document.getElementById("events");
@@ -229,7 +217,6 @@ function eventTextAndButtons(scene) {
 
     events.innerHTML = "";
     options.innerHTML = "";
-
 
     let eventText = "";
 
@@ -244,8 +231,6 @@ function eventTextAndButtons(scene) {
                 <button onclick="playClickSound(); selectPath('explore')" class="fade-in">EXPLORE</button>
                 <button onclick="playClickSound(); selectPath('ignore')" class="fade-in">IGNORE</button>   
             `;
-
-
             break;
 
         case 'crossroads':
@@ -254,7 +239,6 @@ function eventTextAndButtons(scene) {
                 <button onclick="playClickSound(); selectPath('narrowPassage')" class="fade-in">The Narrow Passage</button>
                 <button onclick="playClickSound(); selectPath('rockyRoad')" class="fade-in">The Rocky Road</button>
             `;
-
             break;
 
         case "now_or_never":
@@ -273,9 +257,10 @@ function eventTextAndButtons(scene) {
     fadeInContent();
 }
 
+
 /**
- * Fade in all elements with class 'fade-in' with a short delay in between,
- * to create a staggered animation effect.
+ * Adds the "show" class to all elements with class "fade-in" after a short delay, in order of their appearance in the DOM.
+ * This creates a fade-in effect for the buttons.
  */
 function fadeInContent() {
     const buttons = document.querySelectorAll('.fade-in');
@@ -286,12 +271,13 @@ function fadeInContent() {
     });
 }
 
+
 /**
- * Presents a confirmation dialog based on the player's chosen path and, upon confirmation, 
- * updates the scene accordingly. If the player cancels the action, a cancellation message is shown.
+ * Asks the user for confirmation before choosing a path.
+ * If the user confirms, it changes the scene based on the choice.
+ * If the user cancels, it shows a message saying "Action canceled".
  * 
- * @param {string} choice - The path choice made by the player. Can be "explore", "ignore", 
- * "narrowPassage", or "rockyRoad".
+ * @param {string} choice - The choice to be confirmed. Can be "explore", "ignore", "narrowPassage", or "rockyRoad".
  */
 function selectPath(choice) {
     let confirmation;
@@ -301,9 +287,9 @@ function selectPath(choice) {
     } else if (choice === "ignore") {
         confirmation = confirm("Are you sure you want to ignore the whisper?");
     } else if (choice === "narrowPassage") {
-        confirmation = confirm("You're about to go through The Rocky Road");
+        confirmation = confirm("You need a torch to make it through the narrow passage!");
     } else if (choice === "rockyRoad") {
-        confirmation = confirm("You're about to go through The Rocky Road");
+        confirmation = confirm("You need a rope to make it through The Rocky Road");
     }
 
     if (confirmation) {
@@ -332,10 +318,12 @@ function selectPath(choice) {
 }
 
 /**
- * Changes the background image of the body based on the scene name passed in.
+ * Changes the background image of the body based on the scene argument.
+ * The scene argument determines which background image is set.
+ * The function also adds a smooth transition effect on background change.
  * 
- * @param {string} scene - The name of the scene. The background image will be changed to the one 
- *                         associated with this scene.
+ * @param {string} scene - The scene to set the background image for.
+ *                          Can be "story", "explore", "ignore", "narrationAfterExplore", "nextSceneInIgnorePath", "criticalMoment", "narrowPassage", "rockyRoad", "escapeEnding", "treasureEnding", "sadEnding", or "startScreen".
  */
 function changeBackground(scene) {
     const body = document.body;
@@ -384,21 +372,18 @@ function changeBackground(scene) {
         default:
             body.style.backgroundImage = "";
             break;
-
     }
 
-    /* Add smooth transition on background change */
     body.style.transition = "background-image 1s ease-in-out";
 
 }
 
 /**
- * Types out the given text on the narration element with a typing effect,
- * playing a typing sound during the effect. Once the typing is complete,
- * it pauses the sound and executes the provided callback function.
- *
- * @param {string} text - The text content to be typed out in the narration element.
- * @param {function} callback - A function to be called after the typing effect is complete.
+ * Types out a given string of text on the page, with a typing animation effect.
+ * The text is displayed in the element with the id "narration".
+ * The callback function is called when the text is finished being typed out.
+ * @param {string} text - The text to be typed out.
+ * @param {function} callback - The function to call when the text is finished.
  */
 function typeText(text, callback) {
     const narrationText = document.getElementById("narration");
@@ -423,12 +408,15 @@ function typeText(text, callback) {
             typingSound.pause();
             typingSound.currentTime = 0;
 
-            /* when the text is finished, call the callback function to manipulate the DOM */
-            if (callback) callback();
+            /* when the text is finished, calling the callback function to manipulate the DOM */
+            if (callback) {
+                callback();
+            }
         }
     }
 
     type();
+
 }
 
 /**
@@ -505,32 +493,31 @@ function readInscription() {
 }
 
 
+
 /**
- * Displays the ending screen with the specified title and message. The ending screen
- * is only shown after a delay of 1 second, and the scene container is hidden.
- * 
+ * Hides the main game interface and shows the ending screen with the given title and message.
+ * The background of the ending screen is changed to the given scene.
  * @param {string} title - The title to be displayed on the ending screen.
  * @param {string} message - The message to be displayed on the ending screen.
- * @param {string} scene - The background scene to display on the ending screen.
+ * @param {string} scene - The scene to be used as the background of the ending screen.
  */
 function showEndScreen(title, message, scene) {
 
-        document.getElementById("endTitle").innerText = title;
-        document.getElementById("endMessage").innerText = message;
-    
-        const endScreen = document.getElementById("endScreen");
-    
-        document.getElementById("sceneContainer").style.display = "none";
-        endScreen.style.display ="flex";
-    
-        changeBackground(scene);
+    document.getElementById("endTitle").innerText = title;
+    document.getElementById("endMessage").innerText = message;
+
+    const endScreen = document.getElementById("endScreen");
+
+    document.getElementById("sceneContainer").style.display = "none";
+    endScreen.style.display = "flex";
+
+    changeBackground(scene);
 
 }
 
 /**
- * Hides the ending screen and shows the title and start screen again.
- * Also hides the inventory button and changes the background to the start screen background.
- * Finally, clears local storage.
+ * Resets the game state by clearing local storage, hiding the ending screen and showing the title and start screen again.
+ * The background of the start screen is also changed to the "startScreen" scene.
  */
 function restartGame() {
     localStorage.clear();
@@ -544,19 +531,12 @@ function restartGame() {
 
 }
 
-// function clearInventoryDisplay() {
-//     const inventoryUI = document.getElementById("inventoryDisplay");
-//     if (inventoryUI) {
-//         inventoryUI.innerHTML = ""; // Töm eventuellt UI-element för inventariet
-//     }
-// }
-
-
 /**
- * Adds the given items to the player's inventory. If the item is not already in the inventory,
- * it is added and a popup message is shown to the player. The inventory is then saved to local storage.
+ * Adds the given items to the player's inventory and saves it to local storage.
+ * If an item is already in the inventory, it is not added again.
+ * After adding the items, a popup message is shown for each item added.
  * 
- * @param {...string} items - The items to add to the inventory.
+ * @param {...string} items - The items to be added to the player's inventory.
  */
 function addToInventory(...items) {
     let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
@@ -573,20 +553,18 @@ function addToInventory(...items) {
     });
 }
 
-
 /**
- * Retrieves the player's inventory from local storage.
- * 
- * @returns {Array} An array containing the items in the player's inventory. 
- *                  Returns an empty array if no inventory is found.
+ * Returns the current inventory of the player as an array of strings.
+ * If there is no inventory saved in local storage, an empty array is returned.
+ * @returns {string[]} The current inventory of the player.
  */
 function getInventory() {
     return JSON.parse(localStorage.getItem('inventory')) || [];
 }
 
 /**
- * Removes the specified item from the player's inventory. If the item exists in the inventory,
- * it is removed and the updated inventory is saved to local storage.
+ * Removes the specified item from the player's inventory and updates the inventory in local storage.
+ * If the item is not present in the inventory, no changes are made.
  * 
  * @param {string} item - The item to be removed from the inventory.
  */
@@ -596,18 +574,12 @@ function removeFromInventory(item) {
     localStorage.setItem('inventory', JSON.stringify(inventory));
 }
 
-/**
- * Shows the player's current inventory in an alert box.
- */
-// function showInventory() {
-//     const inventory = getInventory();
-//     alert(`inventory: ${inventory.length ? inventory.join(', ') : 'Empty'}`);
-// }
 
 /**
- * Adds the specified item to the player's inventory and shows the current inventory.
+ * Picks up the specified item from the scene and adds it to the player's inventory.
+ * The item is removed from the scene after being picked up.
  * 
- * @param {string} item - The item to be added to the inventory.
+ * @param {string} item - The item to be picked up.
  */
 function pickUpItem(item) {
     addToInventory("torch");
