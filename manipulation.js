@@ -378,7 +378,7 @@ function changeBackground(scene) {
             body.style.backgroundImage = "url('media/sadEnding.png')";
             break;
         case "startScreen":
-            body.style.backgroundImage = "url('/media/black.jpeg')";
+            body.style.backgroundImage = "url('media/black.jpeg')";
             break;
 
         default:
