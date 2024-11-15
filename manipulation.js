@@ -523,8 +523,6 @@ function showEndScreen(title, message, scene) {
         document.getElementById("sceneContainer").style.display = "none";
         endScreen.style.display ="flex";
     
-        document.getElementById("inventoryButton").style.display = "none";
-
         changeBackground(scene);
 
 }
