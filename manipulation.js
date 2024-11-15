@@ -535,17 +535,23 @@ function showEndScreen(title, message, scene) {
  * Finally, clears local storage.
  */
 function restartGame() {
+    localStorage.clear();
+
     document.getElementById("endScreen").style.display = "none";
 
     document.getElementById("title").style.display = "block";
     document.getElementById("startScreen").style.display = "block";
 
-    document.getElementById("inventoryButton").style.display = "none";
-
     changeBackground("startScreen");
 
-    localStorage.clear();
 }
+
+// function clearInventoryDisplay() {
+//     const inventoryUI = document.getElementById("inventoryDisplay");
+//     if (inventoryUI) {
+//         inventoryUI.innerHTML = ""; // Töm eventuellt UI-element för inventariet
+//     }
+// }
 
 
 /**
