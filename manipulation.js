@@ -391,7 +391,7 @@ function typeText(text, callback) {
     narrationText.style.display = "block"; /* Show the story text */
 
     let letterIndex = 0;
-    const typingSpeed = 2;
+    const typingSpeed = 10;
 
     const typingSound = new Audio("media/typingSound.mp3");
     typingSound.loop = true;
