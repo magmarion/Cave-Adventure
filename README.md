@@ -1,6 +1,6 @@
 # Interactive Cave Adventure Game
 
-[ADVENTURE GAME DEPLOYED APP](https://elnurguliy.github.io/FirstGame/)
+[ADVENTURE GAME DEPLOYED APP](https://magmarion.github.io/FirstGame/)
  
 ## Overview
 
