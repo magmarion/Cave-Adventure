@@ -1,6 +1,6 @@
 # Interactive Cave Adventure Game
 
-[ADVENTURE GAME DEPLOYED APP](https://magmarion.github.io/FirstGame/)
+[Try The Game](https://magmarion.github.io/Cave-Adventure/)
  
 ## Overview
 
